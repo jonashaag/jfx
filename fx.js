@@ -1,3 +1,16 @@
+/*
+ * ----------------------------------------------------
+ *                      $fx()
+ * ----------------------------------------------------
+ * an ultra tiny (3,7kb) javascript animation framework
+ *
+ * Version 0.1b
+ * Author: Sergij Javors'kij <yavorskiy.s@gmail.com>
+ * Bugfixes: Jonas Haag <jonas@lophus.org>
+ * License: GPL and MIT
+ * Original Code and Documentation: http://fx.inetcat.com
+ */
+
 function $fx(initElm){
     if(initElm.nodeType && initElm.nodeType==1)
         var elm = initElm;
@@ -161,6 +174,9 @@ function $fx(initElm){
                 params.from = this._fx[params.type]();
         }
         params._initial = params.from;
+        if(params.from > params.to) params.step = -Math.abs(params.step);
+        // force negative steps if the starting value is higher than the
+        // end value (e.g. opacity from 100 to 0 => step -5)
         this._fx[params.type](params.from, params.unit);
         this._fx.sets[currSet]._queue.push(params);
         return this;
@@ -204,14 +220,16 @@ function $fx(initElm){
         return this;
     };
 
-    elm.fxReset = function(){
-            for(var i=0; i<this._fx.sets.length; i++){
-                for(var j=0; j<this._fx.sets[i]._queue.length; j++){
-                    var params = this._fx.sets[i]._queue[j];
-                    if(isNaN(params._initial))
-                        this._fx[params.type]('','');
-                    else
-                        this._fx[params.type](params._initial, params.unit);
+    elm.fxReset = function(resetCSS){
+            if(resetCSS) {
+                for(var i=0; i<this._fx.sets.length; i++){
+                    for(var j=0; j<this._fx.sets[i]._queue.length; j++){
+                        var params = this._fx.sets[i]._queue[j];
+                        if(isNaN(params._initial))
+                            this._fx[params.type]('','');
+                        else
+                            this._fx[params.type](params._initial, params.unit);
+                    }
                 }
             }
             var del = ['_fx','fxHold','fxAdd','fxAddSet','fxRun','fxPause','fxStop','fxReset'];
