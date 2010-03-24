@@ -1,8 +1,10 @@
 /*
  * ----------------------------------------------------
- *                      $fx()
+ *                      jfx
  * ----------------------------------------------------
  * an ultra tiny (3,7kb) javascript animation framework
+ * originally named $fx(). I renamed it to jfx to make
+ * it internet/filesystem/VCS compatible.
  *
  * Version 0.1b
  * Author: Sergij Javors'kij <yavorskiy.s@gmail.com>
